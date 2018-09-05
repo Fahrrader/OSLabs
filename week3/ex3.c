@@ -60,7 +60,6 @@ void delete_node(LinkedList *list, int index) {
 int main() {
 	LinkedList *ll = malloc(sizeof(LinkedList));
 	ll->length = 0;
-	print_list(ll);
 	scanf("%i");
 	
 	return 0;
