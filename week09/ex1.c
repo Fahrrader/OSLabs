@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 int frameCount;
-
 int *frameAdresses;
 int *frameAges;
 
@@ -15,11 +14,11 @@ int reference(int virtualAddr) {
         }
     }
 
-    // if page is found in table
+    // look for page in the table
     for (int i = 0; i < frameCount; i++) {
         if (frameAdresses[i] == virtualAddr) {
             frameAges[i] = 0;
-            // hit
+            // yay! hit
             return 0;
         }
     }
@@ -37,7 +36,7 @@ int reference(int virtualAddr) {
     frameAdresses[oldestPageIndex] = virtualAddr;
     frameAges[oldestPageIndex] = 0;
 
-    // miss
+    // everything failed. miss
     return 1;
 }
 
@@ -51,7 +50,7 @@ void initialize() {
     }
 }
 
-double calculateRatio() {
+void calculateRatio() {
     initialize();
 
     printf("Number of page frames: %d\n", frameCount);
@@ -60,14 +59,13 @@ double calculateRatio() {
 
     char cVal = ' ';
     int iVal = 0;
-
-    double hits = 0;
-    double misses = 0;
+    int result;
+    int hits = 0, misses = 0;
 
     for (int i = 0; i < 3882; i++) {
         cVal = fgetc(file);
         if (cVal < '0' || cVal > '9') {
-            int result = reference(iVal);
+            result = reference(iVal);
 
             if (result == 0) {
                 hits++;
@@ -76,27 +74,28 @@ double calculateRatio() {
             }
 
             iVal = 0;
-        }
-        else {
+        } else {
             iVal *= 10;
             iVal += cVal - '0';
         }
     }
 
-    fclose(file);
+    printf("Frame Count: %d\nHit/Miss Ratio: %d/%d\n\n", frameCount, hits, misses);
 
-    return hits/misses;
+    fclose(file);
 }
 
 int main() {
     frameCount = 10;
-    printf("Frame Count: %d\nHit/Miss Ratio: %d\n\n", frameCount, calculateRatio());
+    calculateRatio();
 
     frameCount = 50;
-    printf("Frame Count: %d\nHit/Miss Ratio: %d\n\n", frameCount, calculateRatio());
+    calculateRatio();
 
     frameCount = 100;
-    printf("Frame Count: %d\nHit/Miss Ratio: %d\n\n", frameCount, calculateRatio());
+    calculateRatio();
+
+    scanf("%d", frameCount);
 
     return 0;
 }
