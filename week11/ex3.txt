@@ -1,0 +1,3 @@
+In Program 1, both processes will print "Hello", since printf prints out buffered result only after reaching new line ("\n"), and the buffered result has not been printed before forking.
+
+Thus, in Program 2, only the parent process will print "Hello", then both processes print out empty line.
